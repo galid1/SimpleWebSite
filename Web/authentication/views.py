@@ -46,9 +46,9 @@ def do_write(request):
         # 글쓴이 모델 pk 가져오기
         user_id = request.session['user_id']
         user = WebUser.objects.get(user_id=user_id)
-        user_pk = user.pk
         #글 데이터베이스에 저장
-        board_record = Board(title, contents, user_pk)
+        board_record = Board(board_title=title, board_contents=contents, board_writer=user)
+        board_record.save()
     # 글쓰기 완료 후 게시판 사이트 요청
     return render(request, 'authentication/board.html')
 

@@ -6,7 +6,7 @@ class WebUser(models.Model):
     user_pw = models.CharField(max_length=10)
 
 class Board(models.Model):
-    title = models.CharField(max_length=30)
-    contents = models.CharField(max_length=200)
-    date = models.DateField(auto_now=True)
-    writer = models.ForeignKey(WebUser, models.CASCADE)
+    board_title = models.CharField(max_length=30)
+    board_contents = models.CharField(max_length=200)
+    board_date = models.DateField(auto_now=True)
+    board_writer = models.ForeignKey(WebUser, models.CASCADE)
