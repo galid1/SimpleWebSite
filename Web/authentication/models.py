@@ -7,6 +7,6 @@ class WebUser(models.Model):
 
 class Board(models.Model):
     title = models.CharField(max_length=30)
-    context = models.CharField(max_length=200)
+    contents = models.CharField(max_length=200)
     date = models.DateField(auto_now=True)
     writer = models.ForeignKey(WebUser, models.CASCADE)

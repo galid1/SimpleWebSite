@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+     <!-- 합쳐지고 최소화된 최신 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+    <!-- 부가적인 테마 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+    <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+    <section class="bg-primary text-white mb-0" id="about">
+          <div class="container">
+            <h2 class="text-center text-uppercase text-white">Write</h2>
+            <hr class="star-light mb-5">
+          </div>
+    </section>
+
+    <div class="container">
+        <table class="table table-bordered">
+            <thead>
+                <caption> Write </caption>
+            </thead>
+            <tbody>
+                <form action="/do_write" method="post" encType="multiplart/form-data">
+                    {% csrf_token %}
+                    <tr>
+                        <th>제목: </th>
+                        <td><input type="text" placeholder="제목을 입력하세요. " size="30" name="title"/></td>
+                    </tr>
+                    <tr>
+                        <th>내용: </th>
+                        <td><textarea cols="100" rows="20" placeholder="내용을 입력하세요. " name="contents"></textarea></td>
+                    </tr>
+                    <tr>
+                        <th>첨부파일: </th>
+                        <td><input type="text" placeholder="파일을 선택하세요. " name="filename"/></td>
+                    </tr>
+                    <tr>
+                        <th>비밀번호: </th>
+                        <td><input type="password" name="pw" placeholder="비밀번호를 입력하세요"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <input type="submit" value="등록" />
+                            <input type="button" value="초기화"/>
+                            <input type="button" value="글 목록" onclick="javascript:location.href=''"/>
+                        </td>
+                    </tr>
+                </form>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
