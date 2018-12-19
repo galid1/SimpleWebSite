@@ -1,26 +1,49 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse,HttpResponseRedirect
 from django.urls import reverse
 from .models import *
 
 # Create your views here.
 
-## request page ##
+###### request page ######
 def write(request):
-    # 로그인 검증
+    # 로그인 중인지 확인
     if not confirm_session(request):
         return render(request, 'authentication/service_using_fail.html')
     return render(request, 'authentication/write.html')
 
 def board(request):
-	try:
-		request.session['user_id']
-	except:
-		return render(request, 'authentication/service_using_fail.html')
-	return render(request, 'authentication/board.html')
+    #로그인 중인지 확인
+    if not confirm_session(request):
+        return render(request, 'authentication/service_using_fail.html')
+
+    board_list = Board.objects.all()
+    context = {
+        'board_list': board_list
+    }
+    return render(request, 'authentication/board.html', context)
+
+def board_contents(request, board_id):
+    # 로그인 중인지 확인
+    if not confirm_session(request):
+        return render(request, 'authentication/service_using_fail.html')
+    try:
+        board_record = Board.objects.get(pk=board_id)
+    except: #해당 객체가 존재하지 않는경우 보여질 페이지
+        return render(request, 'authentication/board_load_fail.html')
+    context = {
+        'board_record': board_record
+    }
+    return render(request, 'authentication/board_contents.html', context)
 
 def login(request):
-	return render(request, 'authentication/login.html')
+    #로그인 중인지 확인
+    if confirm_session(request):
+        context = {
+            'login': "True"
+        }
+        return render(request, 'authentication/login_fail.html', context)
+    return render(request, 'authentication/login.html')
 
 def join(request):
     return render(request, 'authentication/join.html')
@@ -28,9 +51,9 @@ def join(request):
 def main(request):
     return render(request, 'authentication/main.html')
 
-## request active ##
+###### request active ######
 def do_write(request):
-    # 로그인 검증
+    # 로그인 중인지 확인
     if not confirm_session(request):
         return render(request, 'authentication/service_using_fail.html')
 
@@ -50,7 +73,7 @@ def do_write(request):
         board_record = Board(board_title=title, board_contents=contents, board_writer=user)
         board_record.save()
     # 글쓰기 완료 후 게시판 사이트 요청
-    return render(request, 'authentication/board.html')
+    return redirect(reverse('board'))
 
 def do_login(request):
     if request.method == 'POST':
@@ -79,7 +102,8 @@ def do_logout(request):
 	del request.session['user_id']
 	return render(request, 'authentication/login.html')
 
-## my method ##
+###### my method ######
+## 글쓰기 관련##
 def write_verification(request, title, contents, pw):
     context = None
     if len(str(title)) <= 1:
@@ -98,6 +122,7 @@ def write_verification(request, title, contents, pw):
         context = None
     return context
 
+## 인증관련 ##
 def login_verification(insert_id, insert_pw):
 	# 모델이 없는 경우 예외처리를 해주어야 에러가 발생하지 않는다
     try:
@@ -122,6 +147,7 @@ def join_verification(insert_id, insert_pw, insert_pw_conf):
         }
     return context
 
+## 세션 관련 ##
 def save_session(request, user_id, user_pw):
     request.session['user_id'] = user_id
     request.session['user_pw'] = user_pw

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 합쳐지고 최소화된 최신 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+    <!-- 부가적인 테마 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+    <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <section class="bg-primary text-white mb-0" id="about">
+          <div class="container">
+            <h2 class="text-center text-uppercase text-white">Board</h2>
+            <hr class="star-light mb-5">
+          </div>
+    </section>
+    <!-- 게시판 테이블 -->
+    <div class="container">
+        <table class="table table-hover table-striped">
+            <tr>
+                <th>번호</th>
+                <td>
+                    {{ board_record.id }}
+                </td>
+            </tr>
+            <tr>
+                <th>제목</th>
+                <td>
+                    {{ board_record.board_title }}
+                </td>
+            </tr>
+            <tr>
+                <th>작성자</th>
+                <td >
+                    {{ board_record.board_writer }}
+                </td>
+            </tr>
+            <tr>
+                <th>날짜</th>
+                <td>
+                    {{ board_record.board_date }}
+                </td>
+            </tr>
+            <tr>
+                <th>내용</th>
+                <td class="">
+                    {{ board_record.board_contents }}
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

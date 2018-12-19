@@ -12,7 +12,9 @@ urlpatterns = [
     url(r'^join', views.join, name='join'),
     # ex : /do_join
     url(r'^do_join', views.do_join, name='do_join'),
-    # ex : /go_board
+    # ex : /board_contents
+    url(r'^board_contents/(?P<board_id>[0-9]+)', views.board_contents, name='board_contents'),
+    # ex : /board
     url(r'^board', views.board, name='board'),
     # ex : /write
     url(r'^write', views.write, name='write'),

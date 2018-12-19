@@ -31,24 +31,23 @@
                     <th>날짜</th>
                 </tr>
             </thead>
-            <tr>
-                <td>1</td>
-                <td>asdasd</td>
-                <td>jjy</td>
-                <td>2018.1.1</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>xx</td>
-                <td>jy</td>
-                <td>2018.3.1</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>acczx</td>
-                <td>jjy</td>
-                <td>2018.5.6</td>
-            </tr>
+
+            {% for board_record in board_list %}
+                <tr style="cursor:pointer" onclick="location.href='/board_contents/{{ board_record.id }}'">
+                    <td>
+                        {{ board_record.id }}
+                    </td>
+                    <td>
+                        {{ board_record.board_title }}
+                    </td>
+                    <td>
+                        {{ board_record.board_writer.user_id }}
+                    </td>
+                    <td>
+                        {{ board_record.board_date }}
+                    </td>
+                </tr>
+            {% endfor %}
         </table>
 
         </hr>
