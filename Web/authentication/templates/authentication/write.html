@@ -11,7 +11,24 @@
 
     <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-
+    <script>
+		function do_join(button){
+			location.href="/join.html"
+		}
+	</script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script>
+        function check_recaptcha(){
+            var v = grecaptcha.getResponse();
+            if(v.length ==0){
+				alert('please check the recaptcha');
+				return false;
+			}
+			else{
+				return true;
+			}
+        }
+    </script>
 </head>
 <body>
     <section class="bg-primary text-white mb-0" id="about">
@@ -27,7 +44,7 @@
                 <caption> Write </caption>
             </thead>
             <tbody>
-                <form action="/do_write" method="post" encType="multiplart/form-data">
+                <form action="/do_write" method="post" encType="multiplart/form-data" onsubmit="return check_recaptcha();">
                     {% csrf_token %}
                     <tr>
                         <th>제목: </th>
@@ -40,6 +57,11 @@
                     <tr>
                         <th>비밀번호: </th>
                         <td><input type="password" name="pw" placeholder="비밀번호를 입력하세요"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                          <div class="g-recaptcha" data-sitekey="6Ld5BYUUAAAAAMx6NO3kbhS9jyQcR4yqy59Tvza2"></div>
+                        </td>
                     </tr>
                     <tr>
                         <td colspan="2">

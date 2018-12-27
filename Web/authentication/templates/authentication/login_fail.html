@@ -45,12 +45,12 @@
         </div>
       </div>
     </nav>
-    <div id="dialog" title="Duplicate">
+    <div id="dialog" title="Login Fail">
         <p>
             {% if login == 'True' %}
                 이미 로그인 중입니다.
                 <button onclick="go_main();">확인</button>
-            {% else %}
+            {% elif target == 'id_or_pw' %}
                 아이디 또는 패스워드가 틀렸습니다.
                 <button onclick="go_login();">확인</button>
             {% endif %}
