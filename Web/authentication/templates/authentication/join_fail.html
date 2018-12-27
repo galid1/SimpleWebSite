@@ -47,8 +47,10 @@
         <p>
             {% if target == 'id' %}
                 아이디가 중복되었습니다.
-            {%  elif target == 'pw' %}
+            {% elif target == 'pw' %}
                 비밀번호가 일치하지 않습니다.
+            {% elif target == 'len' %}
+                ID의 길이는 9자 이하여야 합니다.
             {% endif %}
         </p>
         <button onclick="ok_button_click();">확인</button>

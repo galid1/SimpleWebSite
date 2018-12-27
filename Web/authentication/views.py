@@ -89,11 +89,13 @@ def do_join(request):
         id = request.POST['id']
         pw = request.POST['pw']
         pw_conf = request.POST['pwconf']
-        # 회원가입 검증 (ID 중복 확인, PW 일치 확인)
+        # 회원가입 검증 (ID 중복 확인, PW 일치 확인, 아이디 길이 체크, 특수문자 확인)
         context = join_verification(id, str(pw), str(pw_conf))
-        # 회원가입 에러페이지 출력)
+
+        # context가 None이 아닌 경우 joinfail.html을 출력
         if not context == None :
             return render(request, 'authentication/join_fail.html', context)
+
         new_user = WebUser(user_id=id, user_pw=pw)
         new_user.save()
         return HttpResponseRedirect(reverse('main'))
@@ -133,14 +135,27 @@ def login_verification(insert_id, insert_pw):
         return False
     return True
 
+# 회원가입 요청시 검증 메소드
+# 키값을 'target'으로 하고 에러의 이름을 value로하는 사전형 자료형을 리턴한다
 def join_verification(insert_id, insert_pw, insert_pw_conf):
-    user_list = WebUser.objects.all()
     context = None
+    # ID 10자 이하 확인
+    if len(str(insert_id)) > 9:
+        context={
+            'target': 'len'
+        }
+    if not context == None:
+        return context
+    user_list = WebUser.objects.all()
+    # id 존재 확인
     for user in user_list:
         if user.user_id == insert_id:
             context={
                 'target': 'id'
             }
+    if not context == None:
+        return context
+    # 암호 일치 확인
     if not insert_pw == insert_pw_conf:
         context={
             'target': 'pw'
