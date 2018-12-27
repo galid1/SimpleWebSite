@@ -45,7 +45,9 @@
 
     <div id="dialog" title="Duplicate">
         <p>
-            {% if target == 'id' %}
+            {% if target == 'sym' %}
+                아이디에 특수문자를 기입할 수 없습니다.
+            {% elif target == 'id' %}
                 아이디가 중복되었습니다.
             {% elif target == 'pw' %}
                 비밀번호가 일치하지 않습니다.

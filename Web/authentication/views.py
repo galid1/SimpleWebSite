@@ -64,7 +64,7 @@ def do_write(request):
         #글쓰기 검증
         context = write_verification(request, title, contents, pw)
         #글쓰기 에러페이지 출력
-        if not context == None :
+        if context is not None :
             return render(request, 'authentication/write_fail.html', context)
         # 글쓴이 모델 pk 가져오기
         user_id = request.session['user_id']
@@ -79,10 +79,11 @@ def do_login(request):
     if request.method == 'POST':
         user_id = request.POST['id']
         user_pw = request.POST['pw']
-        if login_verification(user_id, user_pw):
-            save_session(request, user_id, user_pw)
-            return render(request, 'authentication/main.html')
-        return render(request, 'authentication/login_fail.html')
+        context = login_verification(user_id, user_pw)
+        if context is not None:
+            return render(request, 'authentication/login_fail.html', context)
+        save_session(request, user_id, user_pw)
+        return render(request, 'authentication/main.html')
 
 def do_join(request):
     if request.method == 'POST':
@@ -93,7 +94,7 @@ def do_join(request):
         context = join_verification(id, str(pw), str(pw_conf))
 
         # context가 None이 아닌 경우 joinfail.html을 출력
-        if not context == None :
+        if context is not None :
             return render(request, 'authentication/join_fail.html', context)
 
         new_user = WebUser(user_id=id, user_pw=pw)
@@ -124,28 +125,56 @@ def write_verification(request, title, contents, pw):
         context = None
     return context
 
+def do_login(request):
+    if request.method == 'POST':
+        user_id = request.POST['id']
+        user_pw = request.POST['pw']
+        context = login_verification(user_id, user_pw)
+        if context is not None:
+            return render(request, 'authentication/login_fail.html', context)
+        save_session(request, user_id, user_pw)
+        return render(request, 'authentication/main.html')
+
 ## 인증관련 ##
 def login_verification(insert_id, insert_pw):
-	# 모델이 없는 경우 예외처리를 해주어야 에러가 발생하지 않는다
+    # None이 return 될 경우 에러 없음
+    context = None
+    # 모델이 없는 경우 예외처리를 해주어야 에러가 발생하지 않는다
     try:
         user = WebUser.objects.get(user_id=insert_id)
-    except :
-        return False     
+    except:
+        context = {
+            'target': 'id_or_pw'
+        }
+        return context
+
     if not insert_pw == user.user_pw:
-        return False
-    return True
+        context = {
+            'target': 'id_or_pw'
+        }
+        return context
+
+    return context
 
 # 회원가입 요청시 검증 메소드
 # 키값을 'target'으로 하고 에러의 이름을 value로하는 사전형 자료형을 리턴한다
 def join_verification(insert_id, insert_pw, insert_pw_conf):
     context = None
+    # 특수문자 확인
+    special_symbol = '!@#$%^&*()-_=+`~/*\|><?,.'
+    if any(sym in insert_id for sym in special_symbol):
+        context={
+            'target': 'sym'
+        }
+        return context
+
     # ID 10자 이하 확인
     if len(str(insert_id)) > 9:
         context={
             'target': 'len'
         }
-    if not context == None:
         return context
+
     user_list = WebUser.objects.all()
     # id 존재 확인
     for user in user_list:
@@ -153,13 +182,14 @@ def join_verification(insert_id, insert_pw, insert_pw_conf):
             context={
                 'target': 'id'
             }
-    if not context == None:
         return context
+
     # 암호 일치 확인
     if not insert_pw == insert_pw_conf:
         context={
             'target': 'pw'
         }
+        return context
     return context
 
 ## 세션 관련 ##
@@ -169,7 +199,7 @@ def save_session(request, user_id, user_pw):
 
 def confirm_session(request):
     try:
-        if not request.session['user_id'] == None:
+        if request.session['user_id'] is not None:
             return True
     except:
         return False
