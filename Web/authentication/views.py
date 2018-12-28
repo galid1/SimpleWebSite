@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse,HttpResponseRedirect
 from django.urls import reverse
 from .models import *
+import hashlib
 
 # Create your views here.
 
@@ -97,6 +98,8 @@ def do_join(request):
         if context is not None :
             return render(request, 'authentication/join_fail.html', context)
 
+        # 패스워드 암호화
+        pw = pw_encrypt(pw)
         new_user = WebUser(user_id=id, user_pw=pw)
         new_user.save()
         return HttpResponseRedirect(reverse('main'))
@@ -191,6 +194,10 @@ def join_verification(insert_id, insert_pw, insert_pw_conf):
         }
         return context
     return context
+
+# PW 암호화
+def pw_encrypt(pw):
+    return hashlib.sha256(pw.encode('utf-8')).hexdigest()
 
 ## 세션 관련 ##
 def save_session(request, user_id, user_pw):
