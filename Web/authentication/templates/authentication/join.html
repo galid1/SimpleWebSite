@@ -17,25 +17,6 @@
 
     <!-- Custom styles for this template -->
     <link href="/static/css/freelancer.min.css" rel="stylesheet">
-    	<script>
-		function do_join(button){
-			location.href="/join.html"
-		}
-	</script>
-    <script src='https://www.google.com/recaptcha/api.js'></script>
-    <script>
-        function check_recaptcha(){
-            var v = grecaptcha.getResponse();
-            if(v.length ==0){
-				alert('please check the recaptcha');
-				return false;
-			}
-			else{
-				return true;
-			}
-        }
-    </script>
-
 </head>
 <body>
 <!-- Contact Section -->
@@ -47,7 +28,7 @@
           <div class="col-lg-8 mx-auto">
             <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
             <!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
-            <form name="join" action="/do_join/" method="post" id="contactForm" novalidate="novalidate" onsubmit="return check_recaptcha();">
+            <form name="join" action="/do_join/" method="post" id="contactForm" novalidate="novalidate">
                 {% csrf_token %}
               <div class="control-group">
                 <div class="form-group floating-label-form-group controls mb-0 pb-2">
@@ -79,7 +60,6 @@
               </div>
               <br>
               <div id="success"></div>
-              <div class="g-recaptcha" data-sitekey="6Ld5BYUUAAAAAMx6NO3kbhS9jyQcR4yqy59Tvza2"></div>
               <div class="form-group">
                 <input type="submit" class="btn btn-primary btn-xl" id="sendMessageButton" value ="Join"></input>
               </div>
